@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Bery0za.Core</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <AssemblyName>Bery0za.Core</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Extensions\Extent.IDictionary.cs" />
+    <None Include="Extensions\Extent.IEnumerable.cs" />
+  </ItemGroup>
+
+</Project>
