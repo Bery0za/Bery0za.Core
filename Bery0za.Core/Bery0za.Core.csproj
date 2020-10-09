@@ -5,6 +5,12 @@
     <RootNamespace>Bery0za.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Bery0za.Core</AssemblyName>
+    <Authors>Bery0za</Authors>
+    <Company>Bery0za's</Company>
+    <Copyright>Bery0za 2020</Copyright>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Product>Core</Product>
   </PropertyGroup>
 
   <ItemGroup>
