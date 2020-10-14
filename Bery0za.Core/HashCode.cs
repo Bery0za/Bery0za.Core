@@ -166,7 +166,12 @@ namespace Bery0za.Core
             return (int)hash;
         }
 
-        public static int Combine<T1, T2, T3, T4, T5, T6>(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6)
+        public static int Combine<T1, T2, T3, T4, T5, T6>(T1 value1,
+                                                          T2 value2,
+                                                          T3 value3,
+                                                          T4 value4,
+                                                          T5 value5,
+                                                          T6 value6)
         {
             var hc1 = (uint)(value1?.GetHashCode() ?? 0);
             var hc2 = (uint)(value2?.GetHashCode() ?? 0);
@@ -192,7 +197,13 @@ namespace Bery0za.Core
             return (int)hash;
         }
 
-        public static int Combine<T1, T2, T3, T4, T5, T6, T7>(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7)
+        public static int Combine<T1, T2, T3, T4, T5, T6, T7>(T1 value1,
+                                                              T2 value2,
+                                                              T3 value3,
+                                                              T4 value4,
+                                                              T5 value5,
+                                                              T6 value6,
+                                                              T7 value7)
         {
             var hc1 = (uint)(value1?.GetHashCode() ?? 0);
             var hc2 = (uint)(value2?.GetHashCode() ?? 0);
@@ -220,7 +231,14 @@ namespace Bery0za.Core
             return (int)hash;
         }
 
-        public static int Combine<T1, T2, T3, T4, T5, T6, T7, T8>(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5, T6 value6, T7 value7, T8 value8)
+        public static int Combine<T1, T2, T3, T4, T5, T6, T7, T8>(T1 value1,
+                                                                  T2 value2,
+                                                                  T3 value3,
+                                                                  T4 value4,
+                                                                  T5 value5,
+                                                                  T6 value6,
+                                                                  T7 value7,
+                                                                  T8 value8)
         {
             var hc1 = (uint)(value1?.GetHashCode() ?? 0);
             var hc2 = (uint)(value2?.GetHashCode() ?? 0);
@@ -333,9 +351,9 @@ namespace Bery0za.Core
 
             // To see what's really going on here, have a look at the Combine
             // methods.
-            
+
             var val = (uint)value;
-            
+
             // Storing the value of _length locally shaves of quite a few bytes
             // in the resulting machine code.
             uint previousLength = _length++;
@@ -366,7 +384,7 @@ namespace Bery0za.Core
             // Storing the value of _length locally shaves of quite a few bytes
             // in the resulting machine code.
             uint length = _length;
-            
+
             // position refers to the *next* queue position in this method, so
             // position == 1 means that _queue1 is populated; _queue2 would have
             // been populated on the next call to Add.
@@ -390,9 +408,11 @@ namespace Bery0za.Core
             if (position > 0)
             {
                 hash = QueueRound(hash, _queue1);
+
                 if (position > 1)
                 {
                     hash = QueueRound(hash, _queue2);
+
                     if (position > 2)
                         hash = QueueRound(hash, _queue3);
                 }
@@ -416,7 +436,8 @@ namespace Bery0za.Core
         //   implementation has to change in the future we don't want to worry
         //   about people who might have incorrectly used this type.
 
-        [Obsolete("HashCode is a mutable struct and should not be compared with other HashCodes. Use ToHashCode to retrieve the computed hash code.", true)]
+        [Obsolete("HashCode is a mutable struct and should not be compared with other HashCodes. Use ToHashCode to retrieve the computed hash code.",
+                  true)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override int GetHashCode() => throw new NotSupportedException("SR.HashCode_HashCodeNotSupported");
 

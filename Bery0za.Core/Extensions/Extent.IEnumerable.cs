@@ -19,6 +19,7 @@ namespace Bery0za.Core.Extensions
         public static void ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action)
         {
             int id = 0;
+
             foreach (TSource item in source)
             {
                 action(item, id);

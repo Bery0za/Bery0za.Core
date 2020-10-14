@@ -11,10 +11,10 @@ namespace Bery0za.Core.Collections
     {
         public int Count { get; protected set; }
         public bool IsReadOnly => false;
-        
+
         public T First => _first.Value;
         public T Last => _last.Value;
-        
+
         public LinkedListNode<T> FirstNode => _first;
         public LinkedListNode<T> LastNode => _last;
 
@@ -23,55 +23,55 @@ namespace Bery0za.Core.Collections
             get => NodeAt(index).Value;
             set => NodeAt(index).Value = value;
         }
-        
+
         protected LinkedListNode<T> _first;
         protected LinkedListNode<T> _last;
         protected Dictionary<T, LinkedListNode<T>> _nodes;
 
         private IEqualityComparer<T> _comparer;
-        
+
         public LinkedList()
-            : this(EqualityComparer<T>.Default)
-        {
-            
-        }
+            : this(EqualityComparer<T>.Default) { }
 
         public LinkedList(IEqualityComparer<T> comparer)
         {
             _comparer = comparer;
             _nodes = new Dictionary<T, LinkedListNode<T>>(_comparer);
         }
-        
+
         public void Add(T item)
         {
             AddLast(item);
         }
-        
+
         public void Add(IEnumerable<T> range)
         {
             range.ForEach(Add);
         }
-        
+
         public LinkedListNode<T> AddAfter(T element, T item)
         {
             LinkedListNode<T> node = FindNode(element);
             if (node == null) throw new Exception("Exsiting element is not in list.");
+
             return AddAfter(node, item);
         }
-        
+
         public LinkedListNode<T> AddAfter(LinkedListNode<T> node, T item)
         {
             var newNode = new LinkedListNode<T>(item);
+
             if (node == _last) AddLast(newNode);
             else AddAfter(node, newNode);
+
             return newNode;
         }
-        
+
         protected void AddAfter(LinkedListNode<T> node, LinkedListNode<T> itemNode)
         {
             if (node.List != this) throw new Exception("Node is not in list.");
             if (itemNode.List != null) throw new Exception("Nodes is already in list.");
-            
+
             itemNode.List = this;
             itemNode.Previous = node;
             itemNode.Next = node.Next;
@@ -85,14 +85,17 @@ namespace Bery0za.Core.Collections
         {
             LinkedListNode<T> node = FindNode(element);
             if (node == null) throw new Exception("Exsiting element is not in list.");
+
             return AddBefore(node, item);
         }
-        
+
         public LinkedListNode<T> AddBefore(LinkedListNode<T> node, T item)
         {
             var newNode = new LinkedListNode<T>(item);
+
             if (node == _first) AddFirst(newNode);
             else AddBefore(node, newNode);
+
             return newNode;
         }
 
@@ -100,7 +103,7 @@ namespace Bery0za.Core.Collections
         {
             if (node.List != this) throw new Exception("Node is not in list.");
             if (itemNode.List != null) throw new Exception("Nodes is already in list.");
-            
+
             itemNode.List = this;
             itemNode.Previous = node.Previous;
             itemNode.Next = node;
@@ -109,7 +112,7 @@ namespace Bery0za.Core.Collections
             _nodes.Add(itemNode.Value, itemNode);
             Count++;
         }
-        
+
         public LinkedListNode<T> AddFirst(T item)
         {
             LinkedListNode<T> node = FindNode(item);
@@ -136,7 +139,7 @@ namespace Bery0za.Core.Collections
                 _first = node;
             }
         }
-        
+
         public LinkedListNode<T> AddLast(T item)
         {
             LinkedListNode<T> node = FindNode(item);
@@ -191,35 +194,39 @@ namespace Bery0za.Core.Collections
             if (array.Length < Count - arrayIndex) throw new ArgumentException();
 
             LinkedListNode<T> cur = NodeAt(arrayIndex);
+
             for (int i = arrayIndex; i < Count; i++)
             {
                 array[i - arrayIndex] = cur.Value;
                 cur = cur.Next;
             }
         }
-        
+
         public virtual T ElementAfter(T element)
         {
             LinkedListNode<T> node = FindNode(element);
             if (node == null) throw new Exception("Exsiting element is not in list.");
             if (node.Next == null) throw new Exception("Element is last.");
+
             return node.Next.Value;
         }
-        
+
         public virtual T ElementBefore(T element)
         {
             LinkedListNode<T> node = FindNode(element);
             if (node == null) throw new Exception("Exsiting element is not in list.");
             if (node.Previous == null) throw new Exception("Element is first.");
+
             return node.Previous.Value;
         }
 
         public LinkedListNode<T> FindNode(T element)
         {
             if (element == null) throw new NullReferenceException("Element can't be null.");
+
             return _nodes.TryGetValue(element, out LinkedListNode<T> node) ? node : null;
         }
-        
+
         public IEnumerator<T> GetEnumerator()
         {
             return new LinkedListIterator(this);
@@ -229,13 +236,15 @@ namespace Bery0za.Core.Collections
         {
             return new LinkedListIterator(this);
         }
-        
+
         public int IndexOf(T item)
         {
             LinkedListNode<T> cur = _first;
+
             for (int i = 0; i < Count; i++)
             {
                 if (_comparer.Equals(cur.Value, item)) return i;
+
                 cur = cur.Next;
             }
 
@@ -256,6 +265,7 @@ namespace Bery0za.Core.Collections
             if (index == 0) return _first;
 
             LinkedListNode<T> res = _first;
+
             while (index > 0)
             {
                 res = res.Next;
@@ -269,13 +279,15 @@ namespace Bery0za.Core.Collections
         {
             LinkedListNode<T> node = FindNode(element);
             if (node == null) return false;
+
             return Remove(node, false);
         }
-        
+
         public virtual bool Remove(LinkedListNode<T> node, bool throwIfAnotherList = true)
         {
-            if (node.List != this) return throwIfAnotherList ? throw new Exception("Node is not a part of the list.") : false;
-            
+            if (node.List != this)
+                return throwIfAnotherList ? throw new Exception("Node is not a part of the list.") : false;
+
             if (Count == 1)
             {
                 _first = null;
@@ -296,13 +308,13 @@ namespace Bery0za.Core.Collections
                 node.Previous.Next = node.Next;
                 if (node.Next != null) node.Next.Previous = node.Previous;
             }
-            
+
             _nodes.Remove(node.Value);
             ResetNode(node);
             Count--;
             return true;
         }
-        
+
         public void RemoveAt(int index)
         {
             Remove(NodeAt(index));
@@ -324,21 +336,18 @@ namespace Bery0za.Core.Collections
             public LinkedListIterator(LinkedList<T> list)
             {
                 _list = list;
-                _current = new LinkedListNode<T> { Next = _list._first};
+                _current = new LinkedListNode<T> { Next = _list._first };
             }
 
             public T Current => _current.Value;
 
-            public void Dispose()
-            {
- 	            
-            }
+            public void Dispose() { }
 
             object System.Collections.IEnumerator.Current => Current;
 
             public bool MoveNext()
             {
- 	            if (++_i < _list.Count)
+                if (++_i < _list.Count)
                 {
                     _current = _current.Next;
                     return true;
@@ -349,8 +358,8 @@ namespace Bery0za.Core.Collections
 
             public void Reset()
             {
- 	            _i = -1;
-                _current = new LinkedListNode<T> { Next = _list._first};
+                _i = -1;
+                _current = new LinkedListNode<T> { Next = _list._first };
             }
         }
     }

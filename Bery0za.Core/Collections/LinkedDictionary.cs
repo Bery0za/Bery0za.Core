@@ -10,7 +10,7 @@ namespace Bery0za.Core.Collections
     {
         public int Count => _order.Count;
         public virtual bool IsReadOnly => _dictionary.IsReadOnly;
-        
+
         public ICollection<T> Keys => _order;
         public ICollection<U> Values => _order.Select(key => _dictionary[key]).ToList();
 
@@ -19,22 +19,19 @@ namespace Bery0za.Core.Collections
 
         public LinkedListNode<T> FirstNode => _order.FirstNode;
         public LinkedListNode<T> LastNode => _order.LastNode;
-        
+
         public U this[T key]
         {
             get => _dictionary[key];
             set => _dictionary[key] = value;
         }
-        
+
         private readonly IDictionary<T, U> _dictionary;
         private readonly IDictionary<T, LinkedListNode<T>> _nodes;
         private readonly LinkedList<T> _order;
-        
+
         public LinkedDictionary()
-            : this(EqualityComparer<T>.Default)
-        {
-            
-        }
+            : this(EqualityComparer<T>.Default) { }
 
         public LinkedDictionary(IEqualityComparer<T> comparer)
         {
@@ -42,18 +39,18 @@ namespace Bery0za.Core.Collections
             _nodes = new Dictionary<T, LinkedListNode<T>>();
             _order = new LinkedList<T>();
         }
-        
+
         public void Add(KeyValuePair<T, U> item)
         {
             Add(item.Key, item.Value);
         }
-        
+
         public void Add(T key, U value)
         {
             if (key == null) throw new ArgumentNullException();
             if (_dictionary.ContainsKey(key)) throw new ArgumentException();
             if (_dictionary.IsReadOnly) throw new NotSupportedException();
-            
+
             _nodes.Add(key, _order.AddLast(key));
             _dictionary.Add(key, value);
         }
@@ -61,6 +58,7 @@ namespace Bery0za.Core.Collections
         public LinkedListNode<T> AddAfter(T element, T key, U value)
         {
             if (!_nodes.ContainsKey(element)) throw new Exception("Exciting element is not in list.");
+
             LinkedListNode<T> node = _nodes[element];
 
             return AddAfter(node, key, value);
@@ -78,6 +76,7 @@ namespace Bery0za.Core.Collections
         public LinkedListNode<T> AddBefore(T element, T key, U value)
         {
             if (!_nodes.ContainsKey(element)) throw new Exception("Exciting element is not in list.");
+
             LinkedListNode<T> node = _nodes[element];
 
             return AddBefore(node, key, value);
@@ -113,7 +112,7 @@ namespace Bery0za.Core.Collections
         {
             return _dictionary.Contains(item);
         }
-        
+
         public bool ContainsKey(T key)
         {
             return _dictionary.ContainsKey(key);
@@ -129,6 +128,7 @@ namespace Bery0za.Core.Collections
         public T ElementAfter(T element)
         {
             if (!_nodes.ContainsKey(element)) throw new Exception("Exciting element is not in list.");
+
             LinkedListNode<T> node = _nodes[element];
             if (node.Next == null) throw new Exception("Element is last.");
 
@@ -138,6 +138,7 @@ namespace Bery0za.Core.Collections
         public T ElementBefore(T element)
         {
             if (!_nodes.ContainsKey(element)) throw new Exception("Exciting element is not in list.");
+
             LinkedListNode<T> node = _nodes[element];
             if (node.Previous == null) throw new Exception("Element is first.");
 
@@ -147,6 +148,7 @@ namespace Bery0za.Core.Collections
         public LinkedListNode<T> FindNode(T element)
         {
             if (element == null) throw new NullReferenceException("Element can't be null.");
+
             return _nodes.TryGetValue(element, out LinkedListNode<T> node) ? node : null;
         }
 
@@ -164,23 +166,25 @@ namespace Bery0za.Core.Collections
         public bool Remove(KeyValuePair<T, U> item)
         {
             if (!_dictionary.Contains(item)) return false;
+
             _dictionary.Remove(item);
             _order.Remove(_nodes[item.Key]);
             _nodes.Remove(item.Key);
 
             return true;
         }
-        
+
         public bool Remove(T key)
         {
             if (!_nodes.TryGetValue(key, out LinkedListNode<T> node)) return false;
+
             _dictionary.Remove(key);
             _order.Remove(node);
             _nodes.Remove(key);
 
             return true;
         }
-        
+
         public bool TryGetValue(T key, out U value)
         {
             return _dictionary.TryGetValue(key, out value);
